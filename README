@@ -19,7 +19,8 @@ will also be improved. Obviously, priority is the display.
 **************
 * Compilation
 **************
-TC8E only requires ncurses library (compiled with ncurses 5.7.2).
+TC8E only ncurses library (compiled with ncurses 5.7.2) and
+for lastest tests, libcaca is also required (will be split).
 
 ********
 * Usage
