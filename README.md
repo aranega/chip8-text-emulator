@@ -20,36 +20,35 @@ will also be improved. Obviously, priority is the display.
 
 ## Compilation ##
 
-TC8E only ncurses library (compiled with ncurses 5.7.2) and
-for lastest tests, libcaca is also required (will be put in a different branch later).
+TC8E only need ncurses library (tested with ncurses 5.7.2). For lastest tests, libcaca is also required (will be put in a different branch later).
 
 
 ## Usage ##
 
 For information about options use '-h' or '--help' in the command line.
 The emulator support two built-in keys:
-'q' -> Quit the emulator
-'+' -> Increase the emulator speed
-'-' -> Decrease the emulator speed
+* 'q' -> Quit the emulator
+* '+' -> Increase the emulator speed
+* '-' -> Decrease the emulator speed
 
 The keyboard mapping is the following:
-'r' -> key 0
-UP  -> key 1
-DWN -> key 1
-'t' -> key 3
-LFT -> key 4
-'u' -> key 5
-RGT -> key 6
-'y' -> key 7
-'f' -> key 8
-'g' -> key 9
-'h' -> key 10
-'j' -> key 11
-'v' -> key 12
-'b' -> key 13
-'n' -> key 14
-',' -> key 15
-Theses keys can be changed in 'keyboard.h'.
+* 'r' -> key 0
+* UP  -> key 1
+* DWN -> key 1
+* 't' -> key 3
+* LFT -> key 4
+* 'u' -> key 5
+* RGT -> key 6
+* 'y' -> key 7
+* 'f' -> key 8
+* 'g' -> key 9
+* 'h' -> key 10
+* 'j' -> key 11
+* 'v' -> key 12
+* 'b' -> key 13
+* 'n' -> key 14
+* ',' -> key 15
+Theses keys can be changed in `keyboard.h`.
 
 The example in the "examples" directory comes from 
 rivial studios (http://www.revival-studios.com). 
