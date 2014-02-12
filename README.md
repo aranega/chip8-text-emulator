@@ -1,4 +1,5 @@
 TC8E (Text Mode Chip8 Emulator)
+-------------------------------
 
 Text mode Chip8 Emulator (TC8E) is another chip8 emulator but
 in text mode. The emulator can be launched in console mode only or in
@@ -16,22 +17,22 @@ management must be implemented (currently, the keyboard management
 is a disaster) as well as super chip8 instructions. Display
 will also be improved. Obviously, priority is the display.
 
-**************
-* Compilation
-**************
-TC8E only ncurses library (compiled with ncurses 5.7.2) and
-for lastest tests, libcaca is also required (will be split).
 
-********
-* Usage
-********
+## Compilation ##
+
+TC8E only ncurses library (compiled with ncurses 5.7.2) and
+for lastest tests, libcaca is also required (will be put in a different branch later).
+
+
+## Usage ##
+
 For information about options use '-h' or '--help' in the command line.
 The emulator support two built-in keys:
 'q' -> Quit the emulator
 '+' -> Increase the emulator speed
 '-' -> Decrease the emulator speed
 
-The keyboard mapping is then the following:
+The keyboard mapping is the following:
 'r' -> key 0
 UP  -> key 1
 DWN -> key 1
@@ -50,5 +51,5 @@ RGT -> key 6
 ',' -> key 15
 Theses keys can be changed in 'keyboard.h'.
 
-The example in the "examples" directory is from 
+The example in the "examples" directory comes from 
 rivial studios (http://www.revival-studios.com). 
