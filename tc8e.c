@@ -4,6 +4,7 @@
 #include <string.h>
 #include <ncurses.h>
 #include <time.h>
+#include <unistd.h>
 
 #include "tc8e.h"
 #include "display.h"
@@ -38,7 +39,7 @@ void init_chip8(void){
 
   cpu.SP = 0xFF;
   cpu.PC = MEM_ROM_ADRESS;
-  srand(time(NULL)); 
+  srand(time(NULL));
 }
 
 void load_rom(char *path)
@@ -49,23 +50,23 @@ void load_rom(char *path)
     fprintf(stderr,"File %s not found\n",path);
     exit(FILE_NOT_FOUND);
   }
-  
+
   fread(mem+MEM_ROM_ADRESS,sizeof(uint8_t),MEM_SIZE-MEM_ROM_ADRESS,rom);
   rom_size = ftell(rom);
-  
+
   fclose(rom);
 }
 
 int read_opcode(void)
 {
   uint16_t inst;
-  
+
   if (cpu.PC == MEM_SIZE)
     return EOF;
 
   if (cpu.PC == rom_size)
     return END_ROM;
-  
+
   inst = (mem[cpu.PC]<<8) | mem[cpu.PC+1];
   op1 = OP1(inst);
   op2 = OP2(inst);
@@ -79,7 +80,7 @@ int read_opcode(void)
 void print_mem(unsigned int n)
 {
   unsigned int i, line = n;
-  
+
   for (i=MEM_ROM_ADRESS;i<=rom_size+MEM_ROM_ADRESS;i+=2){
     if (line == n) printf("Adress %x:\t",i);
     if (line == 0){
@@ -94,7 +95,7 @@ void print_mem(unsigned int n)
 void print_disp(unsigned int n, int pp)
 {
   unsigned int i, col = n;
-  
+
   for (i=0;i<DISP_SIZE;i++){
     if (col == 0){
       printf("\n");
@@ -126,7 +127,7 @@ void exec_ret()
 void exec_jmp()
 {
   cpu.PC = OP_12(op2,op3,op4);
-  if (debug) printf("JP %x | PC=%x\n", OP_12(op2,op3,op4), cpu.PC); 
+  if (debug) printf("JP %x | PC=%x\n", OP_12(op2,op3,op4), cpu.PC);
 }
 
 void exec_call()
@@ -205,7 +206,7 @@ void exec_add_v_v()
   else
     cpu.V[0x0F] = 0;
   cpu.V[op2] += cpu.V[op3];
-  
+
   if (debug) printf("ADD V%x, V%x | %x \n",op2,op3, cpu.V[op2]);
 }
 
@@ -283,7 +284,7 @@ void exec_drw_v_v()
   for (l = 0; l < op4; l++){
     gfx = mem[cpu.I+l];
     y = (cpu.V[op3] + l);
-    
+
     for (c = 0; c < 8; c++){
       x = (cpu.V[op2]+c);
       if ((gfx & (0x80 >> c)) != 0){
@@ -344,10 +345,10 @@ void exec_ld_v_k()
   case ',': value=13; break;
   case ';': value=14; break;
   case ':': value=16; break;
-  default: value = 0;    
+  default: value = 0;
   };
   cpu.V[op2] = value;
-  if (debug) printf("LD V%x, k\n",op2);  
+  if (debug) printf("LD V%x, k\n",op2);
   keyboard_async();
 }
 
@@ -386,14 +387,14 @@ void exec_ld_b_v()
 
   mem[cpu.I] = h;
   mem[cpu.I+1] = t;
-  mem[cpu.I+2] = l;  
+  mem[cpu.I+2] = l;
   if (debug) printf("LD B, V%x | val = %d\n",op2,cpu.V[op2]);
 }
 
 /* To check */
 void exec_ld_ai_v()
 {
-  memcpy(mem+cpu.I,cpu.V,(op2+1)*2); 
+  memcpy(mem+cpu.I,cpu.V,(op2+1)*2);
   if (debug) printf("LD [I], V%x | %x%x\n",op2,mem[cpu.I],mem[cpu.I+1]);
 }
 
@@ -477,15 +478,15 @@ void step_by_step()
     return;
   if (!strcmp(cmd,"quit") || !strcmp(cmd,"q"))
     exit(EXIT_SUCCESS);
-  
+
   if (!strcmp(cmd,"help") || !strcmp(cmd,"h"))
     {
       printf("Debugger help\n");
       printf(" next/n         -> go to the next instruction\n");
-      printf(" print [option] -> print stuff (print help for help ;) )\n"); 
+      printf(" print [option] -> print stuff (print help for help ;) )\n");
       printf(" quit/q         -> quit");
     }
-  
+
   if (!strcmp(cmd,"print")){
     sscanf(buff+strlen(cmd),"%s",p1);
     if (*p1 == 'V' || *p1 == 'v'){
@@ -513,7 +514,7 @@ void step_by_step()
 	printf("V%x=%x ",hex,cpu.V[hex]);
       printf("\n");
     } else if (!strcmp(p1,"freq")){
-      printf("freq : %d\n",cycle);   
+      printf("freq : %d\n",cycle);
     } else if (!strcmp(p1,"mem")){
       print_mem(8);
       putchar('\n');
@@ -545,8 +546,8 @@ void step_by_step()
       printf("%x%x\n",mem[hex],mem[hex+1]);
     }
 
-    
-  } else 
+
+  } else
     printf("Command %s unknown\n",cmd);
   step_by_step();
 }
@@ -563,16 +564,16 @@ int main(int argc, char *argv[])
 {
   int debug_mode = 0;
   int looping = 1;
-  int delay_emu = DELAY, i;
+  int delay_emu = DELAY;
   int next = 1;
-  
+
   if (argc < 2){
     fprintf(stderr,"Usage: %s ROM_FILE\n",argv[0]);
     return BAD_USAGE;
   }
-  
+
   init_chip8();
-  
+
   for (;next<argc;next++)
     if (!strcmp(argv[next],"-g")){
       debug_mode = 1;
@@ -585,7 +586,7 @@ int main(int argc, char *argv[])
     else if (!strcmp(argv[next],"-h")
 	     || !strcmp(argv[next], "--help"))
       print_help();
-  
+
   load_rom(argv[next-1]);
 
   if (!debug_mode)
@@ -619,9 +620,6 @@ int main(int argc, char *argv[])
 
     if (cpu.sound > 0)
       cpu.sound--;
-    
-    if (!debug_mode)
-      for (i=0; i<delay_emu; i++);
 
     if (!debug_mode)
       switch (looping = keyboard_manager()){
@@ -632,8 +630,9 @@ int main(int argc, char *argv[])
 	delay_emu += DELAY_STEP;
 	break;
       }
-  }  
-  
+      usleep(delay_emu);
+  }
+
   if (!debug_mode)
     screen_end();
   return 0;

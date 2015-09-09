@@ -1,8 +1,8 @@
 #ifndef __CHIP8_H__
 #define __CHIP8_H__
 
-#define DELAY                   50
-#define DELAY_STEP              500000
+#define DELAY                   1000
+#define DELAY_STEP              100
 
 #define BAD_USAGE              (1)
 #define FILE_NOT_FOUND         (2)

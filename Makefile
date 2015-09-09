@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS= -W -Wall -ansi -pedantic -g
+CFLAGS= -W -Wall -pedantic -g
 LDFLAGS=-lncurses -lcaca
 EXEC=tc8e
 
